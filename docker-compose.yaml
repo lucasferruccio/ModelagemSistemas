@@ -1,0 +1,112 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # API GATEWAY (Ponto de entrada do Postman/JMeter)
+  # ==========================================
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8081:8081"
+    depends_on:
+      - api-cozinhas
+      - api-comandas
+      - api-estoque
+
+  # ==========================================
+  # DOMÍNIO: COZINHAS
+  # ==========================================
+  db-cozinhas:
+    image: mysql:8.0
+    container_name: db-cozinhas
+    environment:
+      MYSQL_DATABASE: cozinhas
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  api-cozinhas:
+    build: ./api-cozinhas
+    container_name: api-cozinhas
+    ports:
+      - "9090:9090"
+    depends_on:
+      db-cozinhas:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-cozinhas:3306/cozinhas?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ''
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  # ==========================================
+  # DOMÍNIO: COMANDAS
+  # ==========================================
+  db-comandas:
+    image: mysql:8.0
+    container_name: db-comandas
+    environment:
+      MYSQL_DATABASE: comandas
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  api-comandas:
+    build: ./api-comandas
+    container_name: api-comandas
+    ports:
+      - "8485:8485"
+    depends_on:
+      db-comandas:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-comandas:3306/comandas?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ''
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+
+  # ==========================================
+  # DOMÍNIO: ESTOQUE
+  # ==========================================
+  db-estoque:
+    image: mysql:8.0
+    container_name: db-estoque
+    environment:
+      MYSQL_DATABASE: estoque
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  api-estoque:
+    build: ./api-estoque
+    container_name: api-estoque
+    ports:
+      - "8082:8082"
+    depends_on:
+      db-estoque:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-estoque:3306/estoque?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ''
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
