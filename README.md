@@ -7,14 +7,6 @@
 
 ### Para iniciar o ambiente basta digitar o seguinte comando:
 
-- Ambiente Windows
 ```
-.\up_win.bat
+docker compose up --build -d
 ```
-
-- Ambiente Linux
-```
-.\up_linux.sh
-```
-
-Ao rodar o script 4 terminais irão aparecer com as informações de cada API.
