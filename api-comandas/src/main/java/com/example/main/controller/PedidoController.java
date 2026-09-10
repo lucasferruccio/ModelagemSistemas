@@ -1,15 +1,12 @@
 package com.example.main.controller;
 
-import com.example.main.model.Mesa;
 import com.example.main.model.Pedido;
 import com.example.main.model.StatusComandaEnum;
 import com.example.main.model.dto.PedidoDTO;
-import com.example.main.repository.MesaRepository;
 import com.example.main.service.PedidoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -17,30 +14,20 @@ import java.util.List;
 public class PedidoController {
 
     private final PedidoService pedidoService;
-    private final MesaRepository mesaRepository;
 
-    public PedidoController(PedidoService pedidoService, MesaRepository mesaRepository) {
+    public PedidoController(PedidoService pedidoService) {
         this.pedidoService = pedidoService;
-        this.mesaRepository = mesaRepository;
     }
 
     @PostMapping
     public ResponseEntity<Pedido> criar(@RequestBody PedidoDTO dto) {
-        Mesa mesa = mesaRepository.findById(dto.getMesaId())
-                .orElseThrow(() -> new RuntimeException("Mesa não encontrada"));
-
-        Pedido pedido = new Pedido();
-        pedido.setMesa(mesa);
-        pedido.setGarcomResponsavel(dto.getGarcomResponsavel());
-        pedido.setItens(dto.getItens());
-        pedido.setStatus(StatusComandaEnum.CRIADO);
-        pedido.setCriadoEm(LocalDateTime.now());
-        pedido.setEnviadoParaCozinha(false);
-
+        // OBS: antes, este metodo montava um Pedido inteiro (e buscava a Mesa)
+        // aqui e depois descartava tudo isso ao chamar pedidoService.criarPedido(dto),
+        // que refaz a mesma busca de Mesa internamente. Era codigo morto que gerava
+        // uma consulta a mais por requisicao sem nenhum efeito. Removido.
         Pedido novoPedido = pedidoService.criarPedido(dto);
         return ResponseEntity.ok(novoPedido);
     }
-
 
     @GetMapping
     public ResponseEntity<List<Pedido>> obterTodosPedidos() {
