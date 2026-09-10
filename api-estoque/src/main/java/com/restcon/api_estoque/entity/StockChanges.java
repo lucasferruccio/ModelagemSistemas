@@ -31,7 +31,7 @@ public class StockChanges {
     @Enumerated(EnumType.STRING)
     private StockChangesTypes type;
 
-    @OneToOne
+    @ManyToOne
     private StockSupplier supplier;
 
     @CreationTimestamp
