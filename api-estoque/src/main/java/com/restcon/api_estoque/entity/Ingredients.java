@@ -44,7 +44,7 @@ public class Ingredients {
         if (quantity > this.quantity) {
             this.quantity = 0.0F;
         } else {
-            this.quantity += quantity;
+            this.quantity -= quantity;
         }
     }
 
