@@ -1,0 +1,34 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 3274,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 176.41753207086106,
+    "medianResTime" : 175.0,
+    "minResTime" : 114.0,
+    "maxResTime" : 270.0,
+    "pct1ResTime" : 196.0,
+    "pct2ResTime" : 206.25,
+    "pct3ResTime" : 226.25,
+    "throughput" : 54.4894732462345,
+    "receivedKBytesPerSec" : 6650.810489176791,
+    "sentKBytesPerSec" : 7.236883165515519
+  },
+  "GET /comanda/api/comandas" : {
+    "transaction" : "GET /comanda/api/comandas",
+    "sampleCount" : 3274,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 176.41753207086106,
+    "medianResTime" : 175.0,
+    "minResTime" : 114.0,
+    "maxResTime" : 270.0,
+    "pct1ResTime" : 196.0,
+    "pct2ResTime" : 206.25,
+    "pct3ResTime" : 226.25,
+    "throughput" : 54.4894732462345,
+    "receivedKBytesPerSec" : 6650.810489176791,
+    "sentKBytesPerSec" : 7.236883165515519
+  }
+}
