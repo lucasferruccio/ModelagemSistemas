@@ -23,7 +23,7 @@ public class StockSupplier {
     private String email;
     private String address;
 
-    @OneToMany
+    @OneToMany(mappedBy = "supplier")
     @JsonManagedReference
     private List<Ingredients> ingredients;
 
